@@ -3,6 +3,7 @@ from slothbot.sloth import Sloth
 from telegram.ext import Updater, CommandHandler, Dispatcher
 from telegram import Bot, Message
 import logging
+import re
 
 # Enable logging
 logging.basicConfig(
@@ -24,22 +25,32 @@ class SlothTelegramBot:
 
     def bot_paste(self, update, context):
         try:
-            # Getting text
-            paste_content: str = update.message.text.split(" ", 1)[1]
-        except IndexError:
-            update.message.reply_text("Hani kod?")
-            return 0
+            matcher = re.match(
+                r"/paste\s+((.|\n)+)",
+                update.message.text,
+                re.MULTILINE)
+            if matcher:
+                paste_content = matcher.group(1)
+            else:
+                update.message.reply_text("Hani kod?")
+                return 0
 
-        last_message: Message = update.message.reply_text(
-            "paste.ubuntu.com 'a bağlanıyorum...")
-        paste_link: str = Sloth().run(
-            paste_content, poster=update.message.from_user.username)
-        self.BOT.edit_message_text(f"İşte kodun: {paste_link}",
-                                   chat_id=update.message.chat_id,
-                                   message_id=last_message.message_id)
-        self.BOT.delete_message(chat_id=update.message.chat_id,
-                                message_id=update.message.message_id)
-        print(paste_link)
+            last_message: Message = update.message.reply_text(
+                "paste.ubuntu.com 'a bağlanıyorum...")
+            paste_link: str = Sloth().run(
+                paste_content, poster=update.message.from_user.username)
+
+            self.BOT.edit_message_text(
+                f"İşte kodun: {paste_link} \n @{update.message.from_user.username}",
+                chat_id=update.message.chat_id,
+                message_id=last_message.message_id)
+
+            self.BOT.delete_message(chat_id=update.message.chat_id,
+                                    message_id=update.message.message_id)
+
+        except Exception as e:
+            update.message.reply_text(
+                f"Aman aman aman! @hakancelik hocam bana bi bakın iyi değilim.(Spoiler {e})")
 
     def run(self):
         self.UPDATER = Updater(self.token, use_context=True)
@@ -53,7 +64,7 @@ class SlothTelegramBot:
 
 
 def main():
-    tbot = SlothTelegramBot("TOKEN")
+    tbot = SlothTelegramBot("879777853:AAEaZVE1gzzaSrc7W-XqfGMVYTZPLRuZ-yw")
     tbot.run()
 
 
