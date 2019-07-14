@@ -42,8 +42,14 @@ class SlothTelegramBot:
 
             last_message: Message = update.message.reply_text(
                 "paste.ubuntu.com 'a bağlanıyorum...")
-            paste_link: str = Sloth().run(
+            sloth = Sloth()
+            paste_link: str = sloth.run(
                 paste_content, poster=update.message.from_user.username)
+
+            if not sloth.validate_link(paste_link):
+                update.message.reply_text(
+                    "İzin verilmeyen bir format kullandınız. Bu, benim suçu değil. paste.ubuntu.com bazen can sıkıcı olabiliyor.")
+                return 0
 
             self.BOT.edit_message_text(
                 f"@{update.message.from_user.username} paylaştı: {paste_link}",
