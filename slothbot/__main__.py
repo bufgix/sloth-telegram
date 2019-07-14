@@ -40,15 +40,16 @@ class SlothTelegramBot:
                 update.message.reply_text("Hani kod?")
                 return 0
 
-            last_message: Message = update.message.reply_text(
-                "paste.ubuntu.com 'a bağlanıyorum...")
+            last_message: Message = self.BOT.send_message(
+                text="paste.ubuntu.com 'a bağlanıyorum...", chat_id=update.message.chat_id)
             sloth = Sloth()
             paste_link: str = sloth.run(
                 paste_content, poster=update.message.from_user.username)
 
             if not sloth.validate_link(paste_link):
-                update.message.reply_text(
-                    "İzin verilmeyen bir format kullandınız. Bu, benim suçum değil. paste.ubuntu.com bazen can sıkıcı olabiliyor.")
+                self.BOT.edit_message_text("İzin verilmeyen bir format kullandınız. Bu, benim suçum değil. paste.ubuntu.com bazen can sıkıcı olabiliyor.",
+                                           chat_id=update.message.chat_id,
+                                           message_id=last_message.message_id)
                 return 0
 
             self.BOT.edit_message_text(
