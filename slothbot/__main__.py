@@ -48,7 +48,7 @@ class SlothTelegramBot:
 
             if not sloth.validate_link(paste_link):
                 update.message.reply_text(
-                    "İzin verilmeyen bir format kullandınız. Bu, benim suçu değil. paste.ubuntu.com bazen can sıkıcı olabiliyor.")
+                    "İzin verilmeyen bir format kullandınız. Bu, benim suçum değil. paste.ubuntu.com bazen can sıkıcı olabiliyor.")
                 return 0
 
             self.BOT.edit_message_text(
