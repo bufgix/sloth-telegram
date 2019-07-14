@@ -1,4 +1,4 @@
-from slothbot.sloth import Sloth
+from sloth import Sloth
 
 from telegram.ext import Updater, CommandHandler, Dispatcher
 from telegram import Bot, Message
