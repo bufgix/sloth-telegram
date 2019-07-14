@@ -5,7 +5,7 @@ from pygments.util import ClassNotFound
 from typing import List, Dict, Any
 import requests
 import pathlib
-
+import re
 LANG_FILE: pathlib.Path = pathlib.Path(__file__).absolute().parent / 'langs.txt'
 
 
@@ -22,6 +22,11 @@ class Sloth:
 
         return f"{self.URL}{self.soup.a.get('href').replace('plain/', '')}"
 
+    def validate_link(self, link):
+        mather = re.match("https://paste.ubuntu.com/p/.+/", link)
+        if not mather:
+            return False
+        return True
     def run(self, text: str, poster: str) -> str:
         payload = dict()
         try:
