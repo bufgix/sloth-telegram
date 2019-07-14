@@ -71,7 +71,7 @@ class SlothTelegramBot:
 
 
 def main():
-    tbot = SlothTelegramBot("879777853:AAEaZVE1gzzaSrc7W-XqfGMVYTZPLRuZ-yw")
+    tbot = SlothTelegramBot("TOKEN")
     tbot.run()
 
 
