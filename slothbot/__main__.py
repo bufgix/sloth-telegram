@@ -2,7 +2,9 @@ from slothbot.sloth import Sloth
 
 from telegram.ext import Updater, CommandHandler, Dispatcher
 from telegram import Bot, Message
+import telegram
 import logging
+import traceback
 import re
 
 # Enable logging
@@ -20,8 +22,11 @@ class SlothTelegramBot:
         self.DISPATCHER: Dispatcher = None
         self.BOT: Bot = None
 
-    def bot_start(self, update, context):
-        update.message.reply_text("Hey")
+    def bot_help(self, update, context):
+        update.message.reply_text(
+            "Merhaba ben bir PasteBotum.\n`/paste <içerik>` diyerek beni kullanabilirsiniz.\n"
+            "Yazdığınız şey bir kod ise hangi dil ile yazıldığını tahmin edeceğim (Yani umarım).",
+            parse_mode=telegram.ParseMode.MARKDOWN)
 
     def bot_paste(self, update, context):
         try:
@@ -41,7 +46,7 @@ class SlothTelegramBot:
                 paste_content, poster=update.message.from_user.username)
 
             self.BOT.edit_message_text(
-                f"İşte kodun: {paste_link} \n @{update.message.from_user.username}",
+                f"@{update.message.from_user.username} paylaştı: {paste_link}",
                 chat_id=update.message.chat_id,
                 message_id=last_message.message_id)
 
@@ -49,15 +54,17 @@ class SlothTelegramBot:
                                     message_id=update.message.message_id)
 
         except Exception as e:
-            update.message.reply_text(
-                f"Aman aman aman! @hakancelik hocam bana bi bakın iyi değilim.(Spoiler {e})")
+            self.BOT.send_message(
+                text=f"Aman aman aman! @hakancelik hocam bana bi bakın iyi değilim.(Spoiler: {e.__class__.__name__})",
+                chat_id=update.message.chat_id)
+            traceback.print_exc()
 
     def run(self):
         self.UPDATER = Updater(self.token, use_context=True)
         self.DISPATCHER = self.UPDATER.dispatcher
         self.BOT = self.UPDATER.bot
 
-        self.DISPATCHER.add_handler(CommandHandler("start", self.bot_start))
+        self.DISPATCHER.add_handler(CommandHandler("help", self.bot_help))
         self.DISPATCHER.add_handler(CommandHandler("paste", self.bot_paste))
         self.UPDATER.start_polling()
         self.UPDATER.idle()
