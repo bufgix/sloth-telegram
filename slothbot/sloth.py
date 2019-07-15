@@ -54,7 +54,7 @@ class Sloth:
 
             langs = [line.rstrip('\n')
                      for line in LANG_FILE.open(mode='r')]
-            if syntax_type not in langs:
+            if not syntax_type in langs:
                 syntax_type = "text"
 
             if syntax_type in ('python2', 'python'):
