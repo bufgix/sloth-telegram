@@ -1,12 +1,22 @@
 # SlothBot - Telegram Paste Bot
 
-## Kullanım
-*Not:* Virtualenv kullanmanız önerilir.
+## How To Use
+
+### Before
+create a .env file.
+**/slothbot/.env**
+
+```
+TOKEN=your_token
+```
+
+and run
+
 ````bash
 $ git clone https://github.com/bufgix/sloth-telegram
 $ cd sloth-telegram
 $ pip install requirements.txt
-$ python -m slothbot
+$ python -m sloth_telegram_bot
 ````
 
-[django_tr](https://t.me/django_turkey) ve [python_tr](https://t.me/python_turkiye) gurupları için yapılmıştır
+This bot was made for [django_turkey](https://t.me/django_turkey) and [python_turkiye](https://t.me/python_turkiye) telegram grups
